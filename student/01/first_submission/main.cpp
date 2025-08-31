@@ -13,7 +13,9 @@ int main()
     cout << "Enter your age: ";
     cin >> age;
 
-    cout << "Pleased to meet you, " << name << "!" << endl;
+    cout << "Pleased to meet you, " << name << "!";
+
+    cout << "In your next birthday you'll be " << age + 1 << " years old!" << endl;
 
     return EXIT_SUCCESS;
 }
