@@ -19,6 +19,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <map>
@@ -75,48 +76,79 @@ void error_message(const string& text) {
 /* End of utility functions */
 /****************************/
 
-//tiedoston lukeminen
 
-void read_file() {
-    cout << "Input file: ";
-    string filename;
-    cin >> filename;
-    string text;
-    int puolipisteet = 0;
 
+// Tarkistaa, onko merkkijono numeerinen
+bool isNumeric(const string &s) {
+    if (s.empty()) return false;
+    for (char c : s) {
+        if (!isdigit(c)) return false;
+    }
+    return true;
+}
+
+
+map<string, vector<string>> read_file(const string &filename) {
     ifstream MyFile(filename);
-    if(not MyFile) {
-        cout << "Error! The input file cannot be opened.";
-        return EXIT_FAILURE;
+    if (!MyFile) {
+        cout << "Error: the input file cannot be opened" << endl;
+        exit(EXIT_FAILURE);
     }
 
-    while(getline(MyFile, text)) {
-        for(char c : text) {
+    map<string, vector<string>> tietue;
+    tietue["author"] = {};
+    tietue["title"]  = {};
+    tietue["pages"]  = {};
+    tietue["date"]   = {};
+    string line;
+    int lineNumber = 0;
+
+    while (getline(MyFile, line)) {
+        lineNumber++;
+
+        int puolipisteet = 0;
+        for(char c : line) {
             if(c == ';') {
                 puolipisteet += 1;
             }
         }
         if(puolipisteet != 3) {
-            cout << "Error : the input file has an erroneous line";
-            return EXIT_FAILURE;
+            cout <<  "Error: the input file has an erroneous line";
+            EXIT_FAILURE;
         }
+
+
+        size_t first  = line.find(';');
+        size_t second = line.find(';', first + 1);
+        size_t third  = line.find(';', second + 1);
+
+        string author = line.substr(0, first);
+        string title  = line.substr(first + 1, second - first - 1);
+        string pages  = line.substr(second + 1, third - second - 1);
+        string date   = line.substr(third + 1);
+
+        if (author.empty() || title.empty() || pages.empty()) {
+            cout << "Error: a line has an empty field";
+            EXIT_FAILURE;
+        }
+
+        if (!isNumeric(pages)) {
+            cout << "Error: amount of pages is not numeric";
+            EXIT_FAILURE;
+        }
+
+
+        tietue["author"].push_back(author);
+        tietue["title"].push_back(title);
+        tietue["pages"].push_back(pages);
+        tietue["date"].push_back(date);
     }
 
-    size_t first = text.find(";");
-    size_t second = text.find(";", first + 1);
-    size_t third = text.find(";", second + 1);
-    size_t fourth = text.find(";", third + 1);
-
-std:string pages;
-    if(third  == std::string::npos) {
-        pages = text.substr(second + 1);
-    } else {
-        pages = text.substr(second + 1, third - second - 1);
-    }
-
-
-
+    return tietue;
 }
+
+
+
 
 int main() {
 
