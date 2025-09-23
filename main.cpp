@@ -33,7 +33,9 @@ using namespace std;
 
 // Split the given string based on the given delimiter.
 // Consider text enclosed with quatation marks as a single word.
+//returns a vector that contains strings
 vector<string> split(const string& str, char delim) {
+    //vector to store the result
     vector<string> result = {""};
     bool inside_quotation = false;
     for ( char current_char : str ) {
@@ -49,6 +51,8 @@ vector<string> split(const string& str, char delim) {
 }
 
 // Return true, if and only if the given string consists only of digits.
+//takes a parameter of a string that you want to check
+//returns a boolean value of whether the given string is numeric
 bool is_numeric(const string& str) {
     for( unsigned int i = 0; i < str.size(); ++i ) {
         if ( not isdigit(str.at(i)) ) {
@@ -59,6 +63,8 @@ bool is_numeric(const string& str) {
 }
 
 // Return true, if and only if the given string consists only of empty spaces.
+//takes a parameter of a string that you want to check
+//returns a boolean value of whether the given string is numeric
 bool is_space(const string& str) {
     for ( char ch : str ) {
         if ( ch != ' ' ) {
@@ -69,11 +75,15 @@ bool is_space(const string& str) {
 }
 
 // Print the given error message.
+//takes a parameter of a string
+//returns an error message as a string
 void error_message(const string& text) {
     cout << "Error: " << text << endl;
 }
 
 //function for printing the known authors and their bibliography in alphabetical order
+//outer map key: string (authors name), outer map value: map of books for the specified author
+//inner map key: string (book title), inner map value: vector of the books details
 void print_authors(const map<string, map<string, vector<string>>>& auths) {
     // map is already in alphabetical order so no need to sort
     // first print out the author as the first elements of the map
@@ -89,6 +99,10 @@ void print_authors(const map<string, map<string, vector<string>>>& auths) {
 }
 
 // function that prints all books by a certain author
+//outer map key: string (authors name), outer map value: map of books from the author
+//inner map key : string (book title), inner map value : vector of the books details
+//key is the author whos books we want to print
+//function has a return value of void so it doesnt return anything
 void print_books_by(const map<string, map<string, vector<string>>>& auths, string key) {
 
     //if author is unknown, print error message and exit function
@@ -103,7 +117,42 @@ void print_books_by(const map<string, map<string, vector<string>>>& auths, strin
     }
 }
 
+//function prints all the authors of a given book (string bookname)
+// outer map key : string(authors name), outer map value : a map of the books by that author
+// inner map key : string(title of book), outer map value : vector of details of the book
+//function has a return value of void so it doesnt return anything
+void authors_of(const map<string, map<string, vector<string>>>& booksByAuthor,
+                const string &bookname){
+    // Vector to store all authors who wrote this book
+    vector<string> authors;
+
+    // Go through all authors
+    for(const auto& pair : booksByAuthor) {
+        const string &author = pair.first;
+        const map<string, vector<string>> &authorBooks = pair.second;
+
+        // Go through all books of this author
+        for(const auto &bookPair : authorBooks) {
+            const string &title = bookPair.first;
+            if(title == bookname) {
+                authors.push_back(author);
+                break;
+            }
+        }
+    }
+
+    // Sort authors alphabetically
+    sort(authors.begin(), authors.end());
+
+    // Print the authors
+    for(const string &a : authors) {
+        cout << a << endl;
+    }
+}
+
+
 // prints n of the most recently read books and all books planned to be read
+//function has a return value of void so it doesnt return anything
 void print_recent_books(map<string, map<string, vector<string>>> auths, int n) {
     cout << "Books read most recently:" << endl;
 
@@ -126,32 +175,42 @@ void print_recent_books(map<string, map<string, vector<string>>> auths, int n) {
 
 }
 
-void thickest(map<string, vector<vector<string>>> booksByAuthor) {
-    int max_sivumaara;
+//checks for the biggest books
+//outer map key (string) name of author, outer map value : vector of books from that author
+//each book is a vector of strings that has a title, number of pages date
 
+    void printThickestBooks(const map<string, vector<vector<string>>> &booksByAuthor) {
+    int max_no_of_pages = 0;
+
+    //goes through every book and finds the highest value for pagenumber
     for(const auto& value_pair: booksByAuthor) {
         for(const auto& book : value_pair.second) {
-            int sivumaara = std::stoi(book[1]);
-            if(sivumaara > max_sivumaara) {
-                max_sivumaara = sivumaara;
+            int number_of_pages = std::stoi(book[1]);
+            //checks for if the current book is longer than the previous high
+            if(number_of_pages > max_no_of_pages) {
+                max_no_of_pages = number_of_pages;
             }
         }
     }
-    cout << "Thickest book(s) has " << max_sivumaara << " pages:";
+    cout << "Thickest book(s) has " << max_no_of_pages << " pages:";
 
+    //checks which books in particular have the length of maximum length
     vector<pair<string, string>> thickestBooks;
     for(const auto&value_pair : booksByAuthor) {
         for(const auto& book : value_pair.second) {
             const string& author = value_pair.first;
             for(const auto& book : value_pair.second) {
-                if(stoi(book[1]) == max_sivumaara) {
+                //if book has the specified number of pages it gets added into the vector
+                if(stoi(book[1]) == max_no_of_pages) {
                     thickestBooks.push_back({author, book[0]});
                 }
             }
         }
 
 
-        sort(thickestBooks.begin(), thickestBooks.end(), [](const pair<string,string> &a, const pair<string,string> &b){
+        //using the sort algorithm to sort the books in an alphabetical order
+        sort(thickestBooks.begin(), thickestBooks.end(),
+             [](const pair<string,string> &a, const pair<string,string> &b){
             if (a.first != b.first) {
                 return a.first < b.first;
             } else {
@@ -159,26 +218,24 @@ void thickest(map<string, vector<vector<string>>> booksByAuthor) {
             }
         });
 
+        //printing the result
     } for(const auto &result : thickestBooks) {
         cout << result.first << " | " << result.second;
     }
 }
 
-// Tarkistaa, onko merkkijono numeerinen
-bool isNumeric(const string &s) {
-    if (s.empty()) return false;
-    for (char c : s) {
-        if (!isdigit(c)) return false;
-    }
-    return true;
-}
 
 
 /****************************/
 /* End of utility functions */
 /****************************/
 
+//function that reads a file and  organizes the books by author
+//filename is the name of the file that you want to read
+//outer map key : (string) authors name, outer map value: vector of books from the author
+//each book is a vector of strings that contains :  title of book, number of pages and date of publication
 map<string, vector<vector<string>>> read_file_by_author(const string &filename) {
+    //opening the file
     ifstream MyFile(filename);
     if (!MyFile) {
         cout << "Error: the input file cannot be opened";
@@ -203,6 +260,7 @@ map<string, vector<vector<string>>> read_file_by_author(const string &filename) 
             EXIT_FAILURE;
         }
 
+        //split the line into author, title, number of pages and date
         size_t first  = line.find(';');
         size_t second = line.find(';', first + 1);
         size_t third  = line.find(';', second + 1);
@@ -212,15 +270,18 @@ map<string, vector<vector<string>>> read_file_by_author(const string &filename) 
         string pages  = line.substr(second + 1, third - second - 1);
         string date   = line.substr(third + 1);
 
+        //checks if one of the three key informations is empty
         if (author.empty() || title.empty() || pages.empty()) {
             cout << "Error: a line has an empty field";
 
         }
 
+        //checks if amount of pages isnt numeric
         if (!isNumeric(pages)) {
             cout << "Error: amount of pages is not numeric";
             exit(EXIT_FAILURE);
         }
+        //pushing the values into their specified place
         tietue[author].push_back({title, pages, date});
     }
 
@@ -238,7 +299,8 @@ int main() {
     string T = "thickest";
     string RB = "recent_books";
 
-    map<string, size_t> allowed_commands = {{Q, 1}, {A, 1}, {BB, 2}, {AO, 2}, {T, 1}, {RB, 2}};
+    map<string, size_t> allowed_commands =
+        {{Q, 1}, {A, 1}, {BB, 2}, {AO, 2}, {T, 1}, {RB, 2}};
 
     while(1) {
         string cmd_long = "";
