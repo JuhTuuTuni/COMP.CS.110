@@ -13,9 +13,9 @@
  *
  * Program authors
  * Names: Juho Tuulos, Niklas Korpeinen
- * Student numbers: 151867558,
- * Username: nxjutu
- * Email: juho.tuulos@tuni.fi,
+ * Student numbers: 151867558, 153845484
+ * Username: nxjutu, crr566
+ * Email: juho.tuulos@tuni.fi, niklas.korpeinen@tuni.fi
 
 #include <iostream>
 #include <vector>
@@ -76,4 +76,5 @@ void error_message(const string& text) {
 int main() {
     return EXIT_SUCCESS;
 }
+
 
