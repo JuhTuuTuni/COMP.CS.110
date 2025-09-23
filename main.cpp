@@ -3,6 +3,20 @@
 //  Copyright © 2025
 //------------------------------------------------
 
+/*Book Diary
+ *
+ * Description:
+ * Program that reads data about books from a file where the lines are of the form:
+ * author;title;number_of_pages;date
+ * Program checks if each line is of correct form.
+ *
+ *
+ * Programm authors
+ * Names: Juho Tuulos, Niklas Korpeinen
+ * Student numbers: 151867558,
+ * Username: nxjutu
+ * Email: juho.tuulos@tuni.fi,
+
 #include <iostream>
 #include <vector>
 
