@@ -16,12 +16,12 @@
  * Student numbers: 151867558, 153845484
  * Username: nxjutu, crr566
  * Email: juho.tuulos@tuni.fi, niklas.korpeinen@tuni.fi
- *
  */
 
 #include <iostream>
-#include <fstream>
 #include <vector>
+#include <string>
+#include <map>
 
 using namespace std;
 
@@ -31,14 +31,13 @@ using namespace std;
 
 // Split the given string based on the given delimiter.
 // Consider text enclosed with quatation marks as a single word.
-vector<string> split(const string &str, char delim)
-{
+vector<string> split(const string& str, char delim) {
     vector<string> result = {""};
     bool inside_quotation = false;
-    for (char current_char : str) {
-        if (current_char == '"') {
+    for ( char current_char : str ) {
+        if ( current_char == '"' ) {
             inside_quotation = not inside_quotation;
-        } else if (current_char == delim and not inside_quotation) {
+        } else if ( current_char == delim and not inside_quotation ) {
             result.push_back("");
         } else {
             result.back().push_back(current_char);
@@ -48,10 +47,9 @@ vector<string> split(const string &str, char delim)
 }
 
 // Return true, if and only if the given string consists only of digits.
-bool is_numeric(const string &str)
-{
-    for (unsigned int i = 0; i < str.size(); ++i) {
-        if (not isdigit(str.at(i))) {
+bool is_numeric(const string& str) {
+    for( unsigned int i = 0; i < str.size(); ++i ) {
+        if ( not isdigit(str.at(i)) ) {
             return false;
         }
     }
@@ -59,10 +57,9 @@ bool is_numeric(const string &str)
 }
 
 // Return true, if and only if the given string consists only of empty spaces.
-bool is_space(const string &str)
-{
-    for (char ch : str) {
-        if (ch != ' ') {
+bool is_space(const string& str) {
+    for ( char ch : str ) {
+        if ( ch != ' ' ) {
             return false;
         }
     }
@@ -70,8 +67,7 @@ bool is_space(const string &str)
 }
 
 // Print the given error message.
-void error_message(const string &text)
-{
+void error_message(const string& text) {
     cout << "Error: " << text << endl;
 }
 
@@ -79,9 +75,8 @@ void error_message(const string &text)
 /* End of utility functions */
 /****************************/
 
-
-
 //tiedoston lukeminen
+
 void read_file() {
     cout << "Input file: ";
     string filename;
@@ -123,8 +118,8 @@ std:string pages;
 
 }
 
-int main()
-{
+int main() {
+
     // creating a map containing all the allowed commands and their proper lengths
     string Q = "quit";
     string A = "authors";
@@ -183,6 +178,7 @@ int main()
 
         }
     }
+
+
     return EXIT_SUCCESS;
 }
-
