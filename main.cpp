@@ -19,9 +19,11 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -101,18 +103,14 @@ bool isNumeric(const string &s) {
 }
 
 
-map<string, vector<string>> read_file(const string &filename) {
+map<string, vector<vector<string>>> read_file_by_author(const string &filename) {
     ifstream MyFile(filename);
     if (!MyFile) {
         cout << "Error: the input file cannot be opened";
-        exit(EXIT_FAILURE);
+        EXIT_FAILURE;
     }
 
-    map<string, vector<string>> tietue;
-    tietue["author"] = {};
-    tietue["title"]  = {};
-    tietue["pages"]  = {};
-    tietue["date"]   = {};
+    map<string, vector<vector<string>>> tietue;
     string line;
     int lineNumber = 0;
 
@@ -141,20 +139,56 @@ map<string, vector<string>> read_file(const string &filename) {
 
         if (author.empty() || title.empty() || pages.empty()) {
             cout << "Error: a line has an empty field";
-            EXIT_FAILURE;
+
         }
 
         if (!isNumeric(pages)) {
             cout << "Error: amount of pages is not numeric";
-            EXIT_FAILURE;
+            exit(EXIT_FAILURE);
         }
-        tietue["author"].push_back(author);
-        tietue["title"].push_back(title);
-        tietue["pages"].push_back(pages);
-        tietue["date"].push_back(date);
+         tietue[author].push_back({title, pages, date});
     }
 
     return tietue;
+}
+
+
+void thickest(map<string, vector<vector<string>>> booksByAuthor) {
+    int max_sivumaara;
+
+    for(const auto& value_pair: booksByAuthor) {
+        for(const auto& book : value_pair.second) {
+            int sivumaara = std::stoi(book[1]);
+            if(sivumaara > max_sivumaara) {
+                max_sivumaara = sivumaara;
+            }
+        }
+    }
+    cout << "Thickest book(s) has " << max_sivumaara << " pages:";
+
+    vector<pair<string, string>> thickestBooks;
+    for(const auto&value_pair : booksByAuthor) {
+        for(const auto& book : value_pair.second) {
+            const string& author = value_pair.first;
+            for(const auto& book : value_pair.second) {
+                if(stoi(book[1]) == max_sivumaara) {
+                    thickestBooks.push_back({author, book[0]});
+                }
+            }
+        }
+
+
+        sort(thickestBooks.begin(), thickestBooks.end(), [](const pair<string,string> &a, const pair<string,string> &b){
+            if (a.first != b.first) {
+                return a.first < b.first;
+            } else {
+                return a.second < b.second;
+            }
+        });
+
+    } for(const auto &result : thickestBooks) {
+        cout << result.first << " | " << result.second;
+    }
 }
 
 
