@@ -125,5 +125,64 @@ std:string pages;
 
 int main()
 {
+    // creating a map containing all the allowed commands and their proper lengths
+    string Q = "quit";
+    string A = "authors";
+    string BB = "books_by";
+    string AO = "authors_of";
+    string T = "thickest";
+    string RB = "recent_books";
+
+    map<string, size_t> allowed_commands = {{Q, 1}, {A, 1}, {BB, 2}, {AO, 2}, {T, 1}, {RB, 2}};
+
+    while(1) {
+        string cmd_long = "";
+        cout << "> ";
+        getline(cin, cmd_long);
+
+        // split the given command string into parts
+        vector<string> cmd_split = split(cmd_long, ' ');
+
+        string cmd = cmd_split[0];
+
+        // check that command is known, and that it is of the right length
+        if(allowed_commands.count(cmd)) {
+            if (sizeof(cmd_split) != allowed_commands[cmd]){
+                cout << "Error: error in command: " << cmd;
+                continue;
+            }
+        }
+
+        else {
+            cout << "Error: unknown command: " << cmd;
+            continue;
+        }
+
+        //Run through the commands
+        if (cmd_split[0] == Q) {
+            return EXIT_SUCCESS;
+        }
+
+        else if (cmd == A) {
+
+        }
+
+        else if (cmd == BB) {
+
+        }
+
+        else if (cmd == AO) {
+
+        }
+
+        else if (cmd == T) {
+
+        }
+
+        else if (cmd == RB) {
+
+        }
+    }
     return EXIT_SUCCESS;
 }
+
