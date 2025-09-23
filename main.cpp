@@ -19,7 +19,6 @@
  */
 
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <string>
 #include <map>
@@ -72,11 +71,25 @@ void error_message(const string& text) {
     cout << "Error: " << text << endl;
 }
 
+//function for printing the known authors and their bibliography in alphabetical order
+void print_authors(const map<string, vector<string>>& auths) {
+    // map is already in alphabetical order so no need to sort
+    for(const auto& pair : auths) {
+        cout << pair.first;
+
+        //collect the book names into a temporary vector in alphabetical order
+        vector<string> books = {};
+        for () {
+            books.push_back()
+        }
+
+    }
+}
+
+
 /****************************/
 /* End of utility functions */
 /****************************/
-
-
 
 // Tarkistaa, onko merkkijono numeerinen
 bool isNumeric(const string &s) {
@@ -143,8 +156,6 @@ map<string, vector<string>> read_file(const string &filename) {
 
     return tietue;
 }
-
-
 
 
 int main() {
