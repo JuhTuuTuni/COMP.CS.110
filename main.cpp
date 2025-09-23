@@ -91,7 +91,7 @@ bool isNumeric(const string &s) {
 map<string, vector<string>> read_file(const string &filename) {
     ifstream MyFile(filename);
     if (!MyFile) {
-        cout << "Error: the input file cannot be opened" << endl;
+        cout << "Error: the input file cannot be opened";
         exit(EXIT_FAILURE);
     }
 
@@ -117,7 +117,6 @@ map<string, vector<string>> read_file(const string &filename) {
             EXIT_FAILURE;
         }
 
-
         size_t first  = line.find(';');
         size_t second = line.find(';', first + 1);
         size_t third  = line.find(';', second + 1);
@@ -136,8 +135,6 @@ map<string, vector<string>> read_file(const string &filename) {
             cout << "Error: amount of pages is not numeric";
             EXIT_FAILURE;
         }
-
-
         tietue["author"].push_back(author);
         tietue["title"].push_back(title);
         tietue["pages"].push_back(pages);
