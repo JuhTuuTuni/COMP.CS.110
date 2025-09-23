@@ -11,7 +11,7 @@
  * Program checks if each line is of correct form.
  *
  *
- * Programm authors
+ * Program authors
  * Names: Juho Tuulos, Niklas Korpeinen
  * Student numbers: 151867558,
  * Username: nxjutu
@@ -76,3 +76,4 @@ void error_message(const string& text) {
 int main() {
     return EXIT_SUCCESS;
 }
+
