@@ -74,24 +74,95 @@ void error_message(const string& text) {
 }
 
 //function for printing the known authors and their bibliography in alphabetical order
-void print_authors(const map<string, vector<string>>& auths) {
+void print_authors(const map<string, map<string, vector<string>>>& auths) {
     // map is already in alphabetical order so no need to sort
-    for(const auto& pair : auths) {
-        cout << pair.first;
+    // first print out the author as the first elements of the map
+    for(const auto& a_pair : auths) {
+        cout << a_pair.first << endl;
 
-        //collect the book names into a temporary vector in alphabetical order
-        vector<string> books = {};
-        for () {
-            books.push_back()
+        //for each author print out their books which are also in alphabetical order
+        for (const auto& b_pair : a_pair.second) {
+            cout << " * " << b_pair.first << endl;
         }
 
     }
 }
 
+// function that prints all books by a certain author
+void print_books_by(const map<string, map<string, vector<string>>>& auths, string key) {
 
-/****************************/
-/* End of utility functions */
-/****************************/
+    //if author is unknown, print error message and exit function
+    if (not auths.count(key)) {
+        error_message("unknown author");
+        return;
+    }
+
+    //print out all the books (which are already) in alphabetical order
+    for (const auto& pair : auths.at(key)) {
+        cout << pair.first << endl;
+    }
+}
+
+// prints n of the most recently read books and all books planned to be read
+void print_recent_books(map<string, map<string, vector<string>>> auths, int n) {
+    cout << "Books read most recently:" << endl;
+
+    //run a loop for n times, where each time we find the most recent book and then print it
+    while (int i = 0 < n) {
+        string most_recent = "9999-99-99";
+
+        //Iterate through the map
+        for(const auto& a_pair : auths) {
+
+            //check all book dates and find the smallest
+            for (const auto& b_pair : a_pair.second) {
+                if ()
+
+            }
+
+        }
+
+    }
+
+}
+
+void thickest(map<string, vector<vector<string>>> booksByAuthor) {
+    int max_sivumaara;
+
+    for(const auto& value_pair: booksByAuthor) {
+        for(const auto& book : value_pair.second) {
+            int sivumaara = std::stoi(book[1]);
+            if(sivumaara > max_sivumaara) {
+                max_sivumaara = sivumaara;
+            }
+        }
+    }
+    cout << "Thickest book(s) has " << max_sivumaara << " pages:";
+
+    vector<pair<string, string>> thickestBooks;
+    for(const auto&value_pair : booksByAuthor) {
+        for(const auto& book : value_pair.second) {
+            const string& author = value_pair.first;
+            for(const auto& book : value_pair.second) {
+                if(stoi(book[1]) == max_sivumaara) {
+                    thickestBooks.push_back({author, book[0]});
+                }
+            }
+        }
+
+
+        sort(thickestBooks.begin(), thickestBooks.end(), [](const pair<string,string> &a, const pair<string,string> &b){
+            if (a.first != b.first) {
+                return a.first < b.first;
+            } else {
+                return a.second < b.second;
+            }
+        });
+
+    } for(const auto &result : thickestBooks) {
+        cout << result.first << " | " << result.second;
+    }
+}
 
 // Tarkistaa, onko merkkijono numeerinen
 bool isNumeric(const string &s) {
@@ -102,6 +173,10 @@ bool isNumeric(const string &s) {
     return true;
 }
 
+
+/****************************/
+/* End of utility functions */
+/****************************/
 
 map<string, vector<vector<string>>> read_file_by_author(const string &filename) {
     ifstream MyFile(filename);
@@ -146,49 +221,10 @@ map<string, vector<vector<string>>> read_file_by_author(const string &filename) 
             cout << "Error: amount of pages is not numeric";
             exit(EXIT_FAILURE);
         }
-         tietue[author].push_back({title, pages, date});
+        tietue[author].push_back({title, pages, date});
     }
 
     return tietue;
-}
-
-
-void thickest(map<string, vector<vector<string>>> booksByAuthor) {
-    int max_sivumaara;
-
-    for(const auto& value_pair: booksByAuthor) {
-        for(const auto& book : value_pair.second) {
-            int sivumaara = std::stoi(book[1]);
-            if(sivumaara > max_sivumaara) {
-                max_sivumaara = sivumaara;
-            }
-        }
-    }
-    cout << "Thickest book(s) has " << max_sivumaara << " pages:";
-
-    vector<pair<string, string>> thickestBooks;
-    for(const auto&value_pair : booksByAuthor) {
-        for(const auto& book : value_pair.second) {
-            const string& author = value_pair.first;
-            for(const auto& book : value_pair.second) {
-                if(stoi(book[1]) == max_sivumaara) {
-                    thickestBooks.push_back({author, book[0]});
-                }
-            }
-        }
-
-
-        sort(thickestBooks.begin(), thickestBooks.end(), [](const pair<string,string> &a, const pair<string,string> &b){
-            if (a.first != b.first) {
-                return a.first < b.first;
-            } else {
-                return a.second < b.second;
-            }
-        });
-
-    } for(const auto &result : thickestBooks) {
-        cout << result.first << " | " << result.second;
-    }
 }
 
 
