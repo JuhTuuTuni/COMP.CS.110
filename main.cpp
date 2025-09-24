@@ -123,6 +123,7 @@ void print_books_by(const map<string, map<string, vector<string>>>& auths, strin
 //function has a return value of void so it doesnt return anything
 void authors_of(const map<string, map<string, vector<string>>>& booksByAuthor,
                 const string &bookname){
+
     // Vector to store all authors who wrote this book
     vector<string> authors;
 
@@ -144,87 +145,198 @@ void authors_of(const map<string, map<string, vector<string>>>& booksByAuthor,
     // Sort authors alphabetically
     sort(authors.begin(), authors.end());
 
+    // if no authors is empty, no book was found
+    if (authors.size() == 0) {
+        error_message("unknown title");
+    }
+
     // Print the authors
     for(const string &a : authors) {
         cout << a << endl;
     }
+
 }
 
 
 // prints n of the most recently read books and all books planned to be read
 //function has a return value of void so it doesnt return anything
 void print_recent_books(map<string, map<string, vector<string>>> auths, int n) {
-    cout << "Books read most recently:" << endl;
 
-    //run a loop for n times, where each time we find the most recent book and then print it
-    while (int i = 0 < n) {
-        string most_recent = "9999-99-99";
+    //map (because its in alphabetical order) that contains all the books yet to be read
+    map<string, vector<string>> to_read;
+
+    //string for checking the most recent book
+    string most_recent = "0000-00-00";
+    //map (because its in alphabetical order) that contains all the books to be printed
+    string book = "";
+    string author = "";
+    string date = "";
+    //id = author + book, for alphabetical sorting
+    string id = "";
+    map<string, vector<string>> to_print;
+
+    //Iterate through the map and erase the books yet to be read
+    for(const auto& a_pair : auths) {
+
+        //check all book dates
+        for (const auto& b_pair : a_pair.second) {
+
+            book = b_pair.first;
+            author = a_pair.first;
+
+            //if the book has yet to be read, the second value is empty
+            if (b_pair.second[1].empty()) {
+                //add the book to the map of to_read and restart loop
+                to_read[author + book] = {author, book};
+                continue;
+            }
+        }
+    }
+
+    //erase the unread books from auth
+    for (const auto& p : to_read) {
+        auths[p.second[0]].erase(p.second[1]);
+    }
+
+    //checking if there are any books left
+    int books_left = 0;
+    for (const auto& a_pair : auths) {
+        if (not a_pair.second.empty()) {
+            books_left = 1;
+            break;
+        }
+    }
+
+    // if there are still books left, we know some of them will be printed
+    if (books_left) {
+        cout << "Books read most recently:" << endl;
+    }
+
+    else {
+        cout << "No books read yet" << endl;
+    }
+
+
+    //run a loop for n times, where each time we find the most recent book(s) and then print
+    int i = 0;
+    while (i < n) {
+        most_recent = "0000-00-00";
+        to_print.clear();
 
         //Iterate through the map
         for(const auto& a_pair : auths) {
 
-            //check all book dates and find the smallest
+            //check all book dates and find the biggest
             for (const auto& b_pair : a_pair.second) {
-                if ()
+
+                book = b_pair.first;
+                author = a_pair.first;
+                date = b_pair.second[1];
+
+
+                //if new most_recent is found, clear the to_print map
+                if (date > most_recent) {
+                    to_print.clear();
+
+                    //add the new values of the most recent book
+                    most_recent = date;
+                    to_print[author + book] = {author, book, date};
+                }
+
+                // if there already exists a book with the same date, append it
+                else if (date == most_recent) {
+                    to_print[{author + book}] = {author, book, date};
+                }
 
             }
 
         }
 
+        //if new biggest was not found,
+        //that means that all read books have been printed
+        if (most_recent == "0000-00-00") {
+            i = n;
+        }
+
+        //otherwise print all the books in to_print,
+        //format is: {id, {author, book, date}}
+        else {
+            for (const auto& book : to_print) {
+                cout << " * " << book.second[2] << " : " <<
+                    book.second[0] << " : " << book.second[1] << endl;
+
+                auths[book.second[0]].erase(book.second[1]);
+                i++;
+            }
+        }
+
     }
 
+    //check if there are any unread books:
+    if (to_read.size() == 0) {
+        cout << "No books planned to be read" << endl;
+    }
+
+    //once the read books have been printed, print the books to be read
+    //format is {id, {author, book}}
+    else {
+        cout << "Books planned to be read:" << endl;
+
+        for (const auto& book : to_read) {
+            cout << " * " << book.second[0] << " : " <<
+                book.second[1] << endl;
+        }
+    }
 }
 
 //checks for the biggest books
 //outer map key (string) name of author, outer map value : vector of books from that author
 //each book is a vector of strings that has a title, number of pages date
 
-    void printThickestBooks(const map<string, vector<vector<string>>> &booksByAuthor) {
+void print_thickest_books(const map<string, map<string, vector<string>>> &booksByAuthor) {
     int max_no_of_pages = 0;
 
     //goes through every book and finds the highest value for pagenumber
     for(const auto& value_pair: booksByAuthor) {
         for(const auto& book : value_pair.second) {
-            int number_of_pages = std::stoi(book[1]);
+            int number_of_pages = std::stoi(book.second[0]);
             //checks for if the current book is longer than the previous high
             if(number_of_pages > max_no_of_pages) {
                 max_no_of_pages = number_of_pages;
             }
         }
     }
-    cout << "Thickest book(s) has " << max_no_of_pages << " pages:";
+    cout << "Thickest book(s) has " << max_no_of_pages << " pages:" << endl;
 
     //checks which books in particular have the length of maximum length
     vector<pair<string, string>> thickestBooks;
     for(const auto&value_pair : booksByAuthor) {
-        for(const auto& book : value_pair.second) {
+        //for(const auto& book : value_pair.second) {
             const string& author = value_pair.first;
             for(const auto& book : value_pair.second) {
                 //if book has the specified number of pages it gets added into the vector
-                if(stoi(book[1]) == max_no_of_pages) {
-                    thickestBooks.push_back({author, book[0]});
+                if(stoi(book.second[0]) == max_no_of_pages) {
+                    thickestBooks.push_back({author, book.first});
                 }
             }
-        }
+        //}
 
 
         //using the sort algorithm to sort the books in an alphabetical order
         sort(thickestBooks.begin(), thickestBooks.end(),
              [](const pair<string,string> &a, const pair<string,string> &b){
-            if (a.first != b.first) {
-                return a.first < b.first;
-            } else {
-                return a.second < b.second;
-            }
-        });
+                 if (a.first != b.first) {
+                     return a.first < b.first;
+                 } else {
+                     return a.second < b.second;
+                 }
+             });
 
         //printing the result
     } for(const auto &result : thickestBooks) {
-        cout << result.first << " | " << result.second;
+        cout << " * " << result.first << " : " << result.second << endl;
     }
 }
-
-
 
 /****************************/
 /* End of utility functions */
@@ -234,20 +346,18 @@ void print_recent_books(map<string, map<string, vector<string>>> auths, int n) {
 //filename is the name of the file that you want to read
 //outer map key : (string) authors name, outer map value: vector of books from the author
 //each book is a vector of strings that contains :  title of book, number of pages and date of publication
-map<string, vector<vector<string>>> read_file_by_author(const string &filename) {
+map<string, map<string, vector<string>>> read_file_by_author(const string &filename) {
     //opening the file
     ifstream MyFile(filename);
     if (!MyFile) {
-        cout << "Error: the input file cannot be opened";
-        EXIT_FAILURE;
+        error_message("the input file cannot be opened");
+        exit(EXIT_FAILURE);
     }
 
-    map<string, vector<vector<string>>> tietue;
+    map<string, map<string, vector<string>>> structure;
     string line;
-    int lineNumber = 0;
 
     while (getline(MyFile, line)) {
-        lineNumber++;
 
         int puolipisteet = 0;
         for(char c : line) {
@@ -256,8 +366,8 @@ map<string, vector<vector<string>>> read_file_by_author(const string &filename) 
             }
         }
         if(puolipisteet != 3) {
-            cout <<  "Error: the input file has an erroneous line";
-            EXIT_FAILURE;
+            error_message("the input file has an erroneous line");
+            exit(EXIT_FAILURE);
         }
 
         //split the line into author, title, number of pages and date
@@ -272,20 +382,21 @@ map<string, vector<vector<string>>> read_file_by_author(const string &filename) 
 
         //checks if one of the three key informations is empty
         if (author.empty() || title.empty() || pages.empty()) {
-            cout << "Error: a line has an empty field";
+            error_message("a line has an empty field");
+            exit(EXIT_FAILURE);
 
         }
 
         //checks if amount of pages isnt numeric
-        if (!isNumeric(pages)) {
-            cout << "Error: amount of pages is not numeric";
+        if (!is_numeric(pages)) {
+            error_message("amount of pages is not numeric");
             exit(EXIT_FAILURE);
         }
         //pushing the values into their specified place
-        tietue[author].push_back({title, pages, date});
+        structure[author][title] = { pages, date};
     }
 
-    return tietue;
+    return structure;
 }
 
 
@@ -302,6 +413,13 @@ int main() {
     map<string, size_t> allowed_commands =
         {{Q, 1}, {A, 1}, {BB, 2}, {AO, 2}, {T, 1}, {RB, 2}};
 
+    string file_name;
+    cout << "Input file: ";
+    getline(cin, file_name);
+
+    //reading file into struct
+    auto auths = read_file_by_author(file_name);
+
     while(1) {
         string cmd_long = "";
         cout << "> ";
@@ -314,14 +432,14 @@ int main() {
 
         // check that command is known, and that it is of the right length
         if(allowed_commands.count(cmd)) {
-            if (sizeof(cmd_split) != allowed_commands[cmd]){
-                cout << "Error: error in command: " << cmd;
+            if (cmd_split.size() != allowed_commands[cmd]){
+                error_message("error in command " + cmd );
                 continue;
             }
         }
 
         else {
-            cout << "Error: unknown command: " << cmd;
+            error_message("unknown command: " + cmd);
             continue;
         }
 
@@ -331,23 +449,27 @@ int main() {
         }
 
         else if (cmd == A) {
-
+            print_authors(auths);
         }
 
         else if (cmd == BB) {
-
+            print_books_by(auths, cmd_split[1]);
         }
 
         else if (cmd == AO) {
-
+            authors_of(auths, cmd_split[1]);
         }
 
         else if (cmd == T) {
-
+            print_thickest_books(auths);
         }
 
         else if (cmd == RB) {
-
+            if (not is_numeric(cmd_split[1])) {
+                error_message("parameter not numeric");
+                continue;
+            }
+            print_recent_books(auths, std::stoi(cmd_split[1]));
         }
     }
 
