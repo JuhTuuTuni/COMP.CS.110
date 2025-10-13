@@ -26,6 +26,10 @@ private:
     Date start_;
     Date end_;
 
+    struct person {
+        string name;
+    };
+
     // TODO: More attributes and private methods
 };
 
