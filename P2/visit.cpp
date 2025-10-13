@@ -1,10 +1,10 @@
 #include "visit.hh"
 
 
-struct room_ {
-    int room_number;
-    int capacity;
-    bool booked;
-};
+void print_all() {
 
-vector<room_> rooms;
+}
+
+void print_current() {
+
+}

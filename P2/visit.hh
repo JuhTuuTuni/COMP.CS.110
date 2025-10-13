@@ -10,6 +10,8 @@
 #define VISIT_HH
 
 #include "date.hh"
+#include "hotel.hh"
+#include <vector>
 
 using namespace std;
 
@@ -19,6 +21,10 @@ public:
     // TODO: Add parameters for the constructor if needed
     Visit();
     ~Visit();
+
+    void print_all(const vector<Hotel::Room>& rooms);
+
+    void print_current(const vector<Hotel::Room>& rooms);
 
     // TODO: More public methods
 
