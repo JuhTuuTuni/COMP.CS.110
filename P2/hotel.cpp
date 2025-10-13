@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <visit.hh>
+#include <date.hh>
 
 // Error and information outputs
 const string FILE_NOT_FOUND = "Error: Input file not found."s;
@@ -133,7 +135,7 @@ void Hotel::book(Params params)
     for (room_& room : rooms) {
         if (room.capacity == req_size and not room.booked) {
             room.booked = true;
-            return;
+            Visit new_visit = Visit(utils::today, utils::today, true, room.room_number, "test");
         }
     }
 

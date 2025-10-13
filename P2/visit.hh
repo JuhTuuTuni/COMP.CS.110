@@ -23,7 +23,7 @@ public:
     Visit();
     ~Visit();
 
-    Visit(Date start, Date end, bool current_);
+    Visit(Date start, Date end, bool current_, int room_num, string name);
 
     void print_all(const vector<Visit> visits);
 
@@ -32,7 +32,7 @@ public:
     // TODO: More public methods
 
     Date get_startdate() {
-        return start_
+        return start_;
     }
 
     Date get_enddate() {
@@ -43,6 +43,8 @@ private:
     Date start_;
     Date end_;
     bool current_;
+    int room_num_;
+    string name_;
 
     struct person {
         string name;
