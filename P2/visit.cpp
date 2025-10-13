@@ -1,5 +1,4 @@
 #include "visit.hh"
-#include "hotel.hh"
 #include <vector>
 #include <iostream>
 

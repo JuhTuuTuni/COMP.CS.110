@@ -10,7 +10,6 @@
 #define VISIT_HH
 
 #include "date.hh"
-#include "hotel.hh"
 #include <iostream>
 #include <vector>
 
@@ -49,11 +48,6 @@ private:
     struct person {
         string name;
     };
-
-    struct room_;
-
-
-    //vector<room_> rooms;
 
     // TODO: More attributes and private methods
 };

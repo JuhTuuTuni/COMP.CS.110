@@ -10,7 +10,7 @@
  * */
 #ifndef HOTEL_HH
 #define HOTEL_HH
-
+#include "visit.hh"
 #include "date.hh"
 #include <vector>
 #include <map>
@@ -22,15 +22,6 @@ using Params = const vector<string>&;
 class Hotel
 {
 public:
-    //structure representing a room
-    struct room_ {
-        int room_number;
-        unsigned int capacity;
-        bool booked;
-    };
-
-    //vector representing rooms in a hotel, consisting of the aforementioned struct
-    vector<room_> rooms;
 
     /**
      * @brief Hotel
@@ -113,6 +104,17 @@ public:
 
 private:
     // TODO: Attributes and private methods
+    //structure representing a room
+    struct room_ {
+        int room_number;
+        unsigned int capacity;
+        bool booked;
+    };
+
+    //vector representing rooms in a hotel, consisting of the aforementioned struct
+    vector<room_> rooms;
+    //vector containing all the visits
+    vector<Visit> visits;
 };
 
 #endif // HOTEL_HH
