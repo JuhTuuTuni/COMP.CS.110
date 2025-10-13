@@ -30,6 +30,10 @@ private:
         string name;
     };
 
+    struct room_;
+
+    vector<room_> rooms;
+
     // TODO: More attributes and private methods
 };
 
