@@ -26,6 +26,8 @@ public:
 
     void print_all(const vector<Visit> visits);
 
+    void end_visit(Date date);
+
     //void print_current(const vector<Hotel::room_>& rooms);
 
     // TODO: More public methods
@@ -41,6 +43,7 @@ public:
     bool get_current() {
         return current_;
     }
+
 
 private:
     Date start_;

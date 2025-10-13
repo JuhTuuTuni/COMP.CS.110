@@ -17,6 +17,11 @@ Visit::Visit(Date start, Date end = Date(), bool current = true, int room_num = 
     room_num_ = room_num;
     name_ = name;
 }
+
+void Visit::end_visit(Date date) {
+    end_ = date;
+    current_ = false;
+}
 //void print_current(const vector<Hotel::room_>& rooms) {
 
 //}
