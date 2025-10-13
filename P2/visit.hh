@@ -38,6 +38,10 @@ public:
         return end_;
     }
 
+    bool get_current() {
+        return current_;
+    }
+
 private:
     Date start_;
     Date end_;
