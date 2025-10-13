@@ -14,6 +14,16 @@ const string GUEST_ENTERED = "A new guest has entered."s;
 const string GUEST_LEFT = "Guest left hotel, visit closed."s;
 const string FULL = "Error: Can't book, no such rooms available."s;
 
+//structure representing a room
+struct room_ {
+    int room_number;
+    unsigned int capacity;
+    bool booked;
+};
+
+//vector representing rooms in a hotel, consisting of the aforementioned struct
+vector<room_> rooms;
+
 Hotel::Hotel()
 {
     //cout << "Hotel constructor" << endl;
@@ -37,6 +47,9 @@ bool Hotel::init()
     }
 
     string line = "";
+
+    //counter used to determine room numbers
+    int counter = 1;
     while ( getline(file, line) )
     {
         vector<string> parts = utils::split(line, ';');
@@ -57,6 +70,11 @@ bool Hotel::init()
         {
             unsigned int size = stoi(parts.at(0));
             // TODO: Write code that creates rooms and adds them into a suitable data structure
+
+            //adds a new room struct to rooms
+            rooms.push_back({counter, size, false});
+            counter++;
+
         }
     }
     return true;
@@ -96,6 +114,17 @@ void Hotel::advance_date(Params params)
 
 void Hotel::print_rooms(Params /*params*/)
 {
+    for (room_ room : rooms) {
+        cout << "Room " << room.room_number << " : " <<
+        "for " << room.capacity <<  " person(s)" << " : ";
+        if (room.booked) {
+            cout << "full" << endl;
+        }
+
+        else {
+            cout << "available for " << room.capacity << " person(s)" << endl;
+        }
+    }
 }
 
 void Hotel::book(Params params)

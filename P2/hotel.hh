@@ -104,6 +104,9 @@ public:
 
 private:
     // TODO: Attributes and private methods
+    struct room_;
+
+    vector<room_> rooms;
 };
 
 #endif // HOTEL_HH
