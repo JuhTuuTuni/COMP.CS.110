@@ -111,10 +111,17 @@ private:
         bool booked;
     };
 
+    //struct representing a guest
+    struct guest_ {
+        string name;
+        vector<Visit> visits;
+        bool visiting;
+    };
+
     //vector representing rooms in a hotel, consisting of the aforementioned struct
     vector<room_> rooms;
-    //vector containing all the visits
-    vector<Visit> visits;
+    //vector representing guests
+    vector<guest_> guests;
 };
 
 #endif // HOTEL_HH

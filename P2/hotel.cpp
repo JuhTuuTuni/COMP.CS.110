@@ -129,10 +129,18 @@ void Hotel::book(Params params)
     string name = params.at(0);
     unsigned int req_size = stoi(params.at(1));
 
+
+
     //iterating through rooms to find suitable room and set as booked if found
     for (room_& room : rooms) {
         if (room.capacity == req_size and not room.booked) {
             room.booked = true;
+
+            guest_ new_guest = {name, {}, true};
+            Visit new_visit = Visit(utils::today, utils::today, true, room.room_number);
+            new_guest.visits.push_back(new_visit);
+            guests.push_back(new_guest);
+
             cout << "GUEST_ENTERED" << endl;
             return;
         }
@@ -148,9 +156,9 @@ void Hotel::leave(Params params)
     string name = params.at(0);
 
     // iterating through visits to find the leaving
-    for (Visit visit : visits) {
-        if (visit.get_name() == name) {
-            visit.end(utils::today);
+    for (guest_ guest : guests) {
+        if (guest.name == name) {
+            guest.visits.back().end_visit(utils::today);
             cout << GUEST_LEFT << endl;
             return;
         }
