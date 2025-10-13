@@ -104,24 +104,23 @@ public:
 
 private:
     // TODO: Attributes and private methods
+
     //structure representing a room
     struct room_ {
-        int room_number;
         unsigned int capacity;
         bool booked;
+        shared_ptr<room_> next;
     };
 
     //struct representing a guest
     struct guest_ {
-        string name;
         vector<Visit> visits;
         bool visiting;
     };
 
-    //vector representing rooms in a hotel, consisting of the aforementioned struct
-    vector<room_> rooms;
-    //vector representing guests
-    vector<guest_> guests;
+    //map representing guests where the boolean value tells if they are present
+    //using map beacuse it is automatically in alphabetical order
+    map<string, guest_> guests;
 };
 
 #endif // HOTEL_HH

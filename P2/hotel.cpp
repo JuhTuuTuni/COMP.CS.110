@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <memory>
 
 // Error and information outputs
 const string FILE_NOT_FOUND = "Error: Input file not found."s;
@@ -38,8 +39,6 @@ bool Hotel::init()
 
     string line = "";
 
-    //counter used to determine room numbers
-    int counter = 1;
     while ( getline(file, line) )
     {
         vector<string> parts = utils::split(line, ';');
@@ -61,9 +60,13 @@ bool Hotel::init()
             unsigned int size = stoi(parts.at(0));
             // TODO: Write code that creates rooms and adds them into a suitable data structure
 
-            //adds a new room struct to rooms
-            rooms.push_back({counter, size, false});
-            counter++;
+            //creating a new pointer
+            shared_ptr<room_> new_room = make_shared<room_>();
+
+            new_room->capacity = size;
+            new_room->next =
+
+
 
         }
     }
@@ -104,16 +107,20 @@ void Hotel::advance_date(Params params)
 
 void Hotel::print_rooms(Params /*params*/)
 {
-    for (room_ room : rooms) {
-        cout << "Room " << room.room_number << " : " <<
-        "for " << room.capacity <<  " person(s)" << " : ";
-        if (room.booked) {
+    int counter = 1;
+    shared_ptr<room_>room = first_;
+
+    while (room != nullptr) {
+        cout << "Room " << counter << " : " <<
+        "for " << room->capacity <<  " person(s)" << " : ";
+        if (room->booked) {
             cout << "full" << endl;
         }
 
         else {
-            cout << "available for " << room.capacity << " person(s)" << endl;
+            cout << "available for " << room->capacity << " person(s)" << endl;
         }
+        room = room->next;
     }
 }
 
@@ -136,10 +143,10 @@ void Hotel::book(Params params)
         if (room.capacity == req_size and not room.booked) {
             room.booked = true;
 
-            guest_ new_guest = {name, {}, true};
+            guest_ new_guest = {name, {}};
             Visit new_visit = Visit(utils::today, utils::today, true, room.room_number);
             new_guest.visits.push_back(new_visit);
-            guests.push_back(new_guest);
+            guests.insert({new_guest, true});
 
             cout << "GUEST_ENTERED" << endl;
             return;
@@ -156,9 +163,9 @@ void Hotel::leave(Params params)
     string name = params.at(0);
 
     // iterating through visits to find the leaving
-    for (guest_ guest : guests) {
-        if (guest.name == name) {
-            guest.visits.back().end_visit(utils::today);
+    for (auto& guest : guests) {
+        if (guest.first == name) {
+            guest.second.visits.back().end_visit(utils::today);
             cout << GUEST_LEFT << endl;
             return;
         }
