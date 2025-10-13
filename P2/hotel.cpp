@@ -14,16 +14,6 @@ const string GUEST_ENTERED = "A new guest has entered."s;
 const string GUEST_LEFT = "Guest left hotel, visit closed."s;
 const string FULL = "Error: Can't book, no such rooms available."s;
 
-//structure representing a room
-struct room_ {
-    int room_number;
-    unsigned int capacity;
-    bool booked;
-};
-
-//vector representing rooms in a hotel, consisting of the aforementioned struct
-vector<room_> rooms;
-
 Hotel::Hotel()
 {
     //cout << "Hotel constructor" << endl;
@@ -129,6 +119,27 @@ void Hotel::print_rooms(Params /*params*/)
 
 void Hotel::book(Params params)
 {
+
+    // if the last parameter is not numeric, return
+    if (not utils::is_numeric(params.back(), false)) {
+        cout << NOT_NUMERIC << endl;
+        return;
+    }
+
+    string name = params.at(0);
+    unsigned int req_size = stoi(params.at(1));
+
+    //iterating through rooms to find suitable room
+    for (room_& room : rooms) {
+        if (room.capacity == req_size and not room.booked) {
+            room.booked = true;
+            return;
+        }
+    }
+
+    //if no suitable rooms were found print error and return
+    cout << FULL << endl;
+    return;
 }
 
 void Hotel::leave(Params params)
