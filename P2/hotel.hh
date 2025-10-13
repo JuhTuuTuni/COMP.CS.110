@@ -22,7 +22,14 @@ using Params = const vector<string>&;
 class Hotel
 {
 public:
-    struct room_;
+    //structure representing a room
+    struct room_ {
+        int room_number;
+        unsigned int capacity;
+        bool booked;
+    };
+
+    //vector representing rooms in a hotel, consisting of the aforementioned struct
     vector<room_> rooms;
 
     /**
