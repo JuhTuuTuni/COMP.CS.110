@@ -11,6 +11,7 @@
 
 #include "date.hh"
 #include "hotel.hh"
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -22,15 +23,26 @@ public:
     Visit();
     ~Visit();
 
-    void print_all(const vector<Hotel::Room>& rooms);
+    Visit(Date start, Date end, bool current_);
 
-    void print_current(const vector<Hotel::Room>& rooms);
+    void print_all(const vector<Visit> visits);
+
+    //void print_current(const vector<Hotel::room_>& rooms);
 
     // TODO: More public methods
+
+    Date get_startdate() {
+        return start_
+    }
+
+    Date get_enddate() {
+        return end_;
+    }
 
 private:
     Date start_;
     Date end_;
+    bool current_;
 
     struct person {
         string name;
@@ -38,7 +50,8 @@ private:
 
     struct room_;
 
-    vector<room_> rooms;
+
+    //vector<room_> rooms;
 
     // TODO: More attributes and private methods
 };
