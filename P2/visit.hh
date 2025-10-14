@@ -32,11 +32,11 @@ public:
 
     // TODO: More public methods
 
-    Date get_startdate() {
+    Date get_startdate() const {
         return start_;
     }
 
-    Date get_enddate() {
+    Date get_enddate() const{
         return end_;
     }
 

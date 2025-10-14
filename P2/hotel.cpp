@@ -178,6 +178,30 @@ void Hotel::leave(Params params)
 
 void Hotel::print_guest_info(Params params)
 {
+    if(params.size() < 1) {
+        //if no parameters found
+        return;
+    }
+    string guest_id = params.at(0);
+
+    auto it = guests.find(guest_id);
+
+    //if guest id was not found in guests
+    if(it == guests.end()) {
+        return;
+    }
+
+    const guest_& guest_data = it->second;
+    for(const Visit& visit : guest_data.visits) {
+        cout << "* Visit ";
+        visit.get_startdate().print();
+        cout << " - ";
+        if(!visit.get_enddate().is_default()) {
+            visit.get_enddate().print();
+            cout << endl;
+        }
+    }
+
 }
 
 void Hotel::print_all_visits(Params /*params*/)
