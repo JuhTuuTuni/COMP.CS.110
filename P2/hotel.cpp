@@ -188,14 +188,18 @@ void Hotel::print_guest_info(Params params)
 
     //if guest id was not found in guests
     if(it == guests.end()) {
+        cout << "Cant find anything matching: " << guest_id;
         return;
     }
 
     const guest_& guest_data = it->second;
+
+    //loop through all of the guests visits on the map
     for(const Visit& visit : guest_data.visits) {
         cout << "* Visit ";
         visit.get_startdate().print();
         cout << " - ";
+        //if visits ending date isnt the default it gets printed
         if(!visit.get_enddate().is_default()) {
             visit.get_enddate().print();
             cout << endl;
@@ -206,6 +210,15 @@ void Hotel::print_guest_info(Params params)
 
 void Hotel::print_all_visits(Params /*params*/)
 {
+    //loop through all the pairs in guests
+    for(const auto& pair: guests) {
+        const string name = pair.first;
+
+        //create a vector that will be passed to print guest info
+        vector<string> single_param = {name};
+
+        print_guest_info(single_param);
+    }
 }
 
 void Hotel::print_current_visits(Params /*params*/)
