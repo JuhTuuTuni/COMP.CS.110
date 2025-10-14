@@ -214,15 +214,30 @@ void Hotel::print_all_visits(Params /*params*/)
     for(const auto& pair: guests) {
         const string name = pair.first;
 
-        //create a vector that will be passed to print guest info
+        //create a vector that will be passed to print_guest_info
         vector<string> single_param = {name};
 
         print_guest_info(single_param);
+
     }
 }
 
 void Hotel::print_current_visits(Params /*params*/)
 {
+    //loop through the pairs in the vector
+    for(const auto& pair : guests) {
+        const string name = pair.first;
+        const guest_ guest_data = pair.second;
+
+        //check if visit is still ongoing, print it if it is
+        if(guest_data.visiting) {
+            const Visit& current = guest_data.visits.back();
+
+            cout << name << " is boarded in room ";
+            cout << current.get_roomnum();
+        }
+
+    }
 }
 
 void Hotel::print_honor_guests(Params /*params*/)

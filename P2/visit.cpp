@@ -22,6 +22,3 @@ void Visit::end_visit(Date date) {
     end_ = date;
     current_ = false;
 }
-//void print_current(const vector<Hotel::room_>& rooms) {
-
-//}

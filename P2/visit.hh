@@ -44,6 +44,10 @@ public:
         return current_;
     }
 
+    int get_roomnum() const{
+        return room_num_;
+    }
+
 
 private:
     Date start_;
