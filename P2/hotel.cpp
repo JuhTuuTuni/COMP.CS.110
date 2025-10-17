@@ -2,7 +2,6 @@
 #include "utils.hh"
 #include <iostream>
 #include <fstream>
-#include <set>
 #include <memory>
 
 // Error and information outputs
@@ -78,7 +77,6 @@ bool Hotel::init()
             //setting the pointer of the previous room to point to the new room
             previous->next = new_room;
             previous = new_room;
-
         }
     }
     return true;
@@ -130,7 +128,6 @@ void Hotel::print_rooms(Params /*params*/)
             cout << "available for " <<
             room->capacity - room->guests << " person(s)" << endl;
         }
-
         else {
             cout << "full" << endl;
         }
@@ -157,9 +154,11 @@ void Hotel::book(Params params)
         return;
     }
 
+    //required capacity for the room
     unsigned int req_size = stoi(params.at(1));
 
     shared_ptr<room_> room = first_;
+    //pointer for the room that is the best match for the booking
     shared_ptr<room_> best_match;
 
     //counter used to write room numbers into visit
@@ -169,13 +168,12 @@ void Hotel::book(Params params)
     while (room != nullptr) {
         if (room->capacity == req_size and room->guests != room->capacity) {
 
-            //set best_macth if it is unset or there is more free space
+            //set best_match if it is unset or there is more free space
             if (best_match == nullptr or
                 room->capacity - room->guests >
                 best_match->capacity - best_match->guests) {
                     best_match = room;
             }
-
         }
         room = room->next;
         counter++;
@@ -200,11 +198,9 @@ void Hotel::book(Params params)
 
         guests[name].visiting = true;
 
-
         cout << GUEST_ENTERED << endl;
         return;
     }
-
     //if no suitable rooms were found print error and return
     cout << FULL << endl;
 }
@@ -213,7 +209,7 @@ void Hotel::leave(Params params)
 {
     string name = params.at(0);
 
-    // iterating through guests to find the leaving
+    // iterating through guests to find the leaving guest
     for(auto& pair: guests) {
         if (pair.first == name) {
 
@@ -222,6 +218,7 @@ void Hotel::leave(Params params)
             pair.second.visiting = false;
 
             Visit& visit = pair.second.visits.back();
+            //end the visit at current date
             visit.end_visit(utils::today);
 
             //getting the room number
@@ -237,19 +234,19 @@ void Hotel::leave(Params params)
             return;
         }
     }
-
     //if the leaving was not found print error and return
     cout << CANT_FIND << name << endl;
 }
 
 void Hotel::print_guest_info(Params params)
 {
+    //if no parameters are found
     if(params.size() < 1) {
-        //if no parameters found
         return;
     }
     string guest_id = params.at(0);
 
+    //variable for the quest so we can use the find method
     auto it = guests.find(guest_id);
 
     //if guest id was not found in guests
@@ -265,13 +262,12 @@ void Hotel::print_guest_info(Params params)
         cout << "* Visit: ";
         visit.get_startdate().print();
         cout << " - ";
-        //if visits is not current print the end date
+        //if visits is not current, print the end date
         if(not visit.get_current()) {
             visit.get_enddate().print();
         }
         cout << endl;
     }
-
 }
 
 void Hotel::print_all_visits(Params /*params*/)
@@ -291,7 +287,6 @@ void Hotel::print_all_visits(Params /*params*/)
 
         cout << name << endl;
         print_guest_info(single_param);
-
     }
 }
 
@@ -315,7 +310,6 @@ void Hotel::print_current_visits(Params /*params*/)
             //if visitor was found, change flag
             no_visitors = false;
         }
-
     }
     if (no_visitors) {
         cout << "None" << endl;
@@ -337,7 +331,6 @@ void Hotel::print_honor_guests(Params /*params*/)
         cout << "None" << endl;
         return;
     }
-
     cout << "With " <<most_visits << " visit(s), the following guest(s) " <<
     "get(s) honorary award:" << endl;
 
