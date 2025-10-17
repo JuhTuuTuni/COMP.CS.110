@@ -22,29 +22,27 @@ public:
     Visit();
     ~Visit();
 
-    Visit(Date start, Date end, bool current_, int room_num, string name);
+    Visit(Date start, int room_num);
 
-    void print_all(const vector<Visit> visits);
-
-    void end_visit(Date date);
+    void end_visit(Date end);
 
     //void print_current(const vector<Hotel::room_>& rooms);
 
     // TODO: More public methods
 
-    Date get_startdate() const {
+    const Date& get_startdate() const {
         return start_;
     }
 
-    Date get_enddate() const{
+    const Date& get_enddate() const{
         return end_;
     }
 
-    bool get_current() {
+    bool get_current() const {
         return current_;
     }
 
-    int get_roomnum() const{
+    const int& get_roomnum() const{
         return room_num_;
     }
 
@@ -54,11 +52,6 @@ private:
     Date end_;
     bool current_;
     int room_num_;
-    string name_;
-
-    struct person {
-        string name;
-    };
 
     // TODO: More attributes and private methods
 };

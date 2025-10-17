@@ -108,9 +108,13 @@ private:
     //structure representing a room
     struct room_ {
         unsigned int capacity;
-        bool booked;
+        unsigned int guests;
         shared_ptr<room_> next;
     };
+
+    //pointer to the first room
+    //rooms will be accessed from a chain of pointers
+    shared_ptr<room_> first_;
 
     //struct representing a guest
     struct guest_ {
@@ -118,8 +122,8 @@ private:
         bool visiting;
     };
 
-    //map representing guests where the boolean value tells if they are present
-    //using map beacuse it is automatically in alphabetical order
+    //map representing guests where the string value represents their name
+    //using map because it is automatically in alphabetical order
     map<string, guest_> guests;
 };
 

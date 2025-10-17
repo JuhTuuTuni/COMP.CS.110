@@ -4,21 +4,24 @@
 
 using namespace std;
 
-
-vector<Visit> current_visits;
-vector<Visit> all_visits;
-
-
-Visit::Visit(Date start, Date end = Date(), bool current = true, int room_num = 0, string name = "") {
-    start_ = start;
-    end_ = end;
-    start_ = start;
-    current_ = current;
-    room_num_ = room_num;
-    name_ = name;
+Visit::Visit()
+{
 }
 
-void Visit::end_visit(Date date) {
-    end_ = date;
+Visit::Visit(Date start, int room_num)
+{
+    room_num_ = room_num;
+    start_ = start;
+    current_ = true;
+    end_ = Date();
+}
+
+Visit::~Visit()
+{
+}
+
+void Visit::end_visit(Date end) {
+
+    end_ = end;
     current_ = false;
 }
